@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Classroom | NexusSchoolERP{% endblock %}
+{% block page_title %}{% if editing %}Edit Classroom{% else %}New Classroom{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Grade</label>
+        <input type="text" name="grade" value="{{ record.grade|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Section</label>
+        <input type="text" name="section" value="{{ record.section|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Teacher</label>
+        <input type="text" name="teacher" value="{{ record.teacher|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Capacity</label>
+        <input type="number" name="capacity" value="{{ record.capacity|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Students</label>
+        <input type="number" name="students" value="{{ record.students|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Room Number</label>
+        <input type="text" name="room_number" value="{{ record.room_number|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Schedule</label>
+      <textarea name="schedule">{{ record.schedule|default:'' }}</textarea>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Classroom</button>
+      <a href="/classrooms/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
