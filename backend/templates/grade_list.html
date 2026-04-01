@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Grades | NexusSchoolERP{% endblock %}
+{% block page_title %}Grades{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search grades...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Grade Letter</option>
+      <option value="a+" {% if status_filter == 'a+' %}selected{% endif %}>A+</option>
+      <option value="a" {% if status_filter == 'a' %}selected{% endif %}>A</option>
+      <option value="b+" {% if status_filter == 'b+' %}selected{% endif %}>B+</option>
+      <option value="b" {% if status_filter == 'b' %}selected{% endif %}>B</option>
+      <option value="c+" {% if status_filter == 'c+' %}selected{% endif %}>C+</option>
+      <option value="c" {% if status_filter == 'c' %}selected{% endif %}>C</option>
+      <option value="d" {% if status_filter == 'd' %}selected{% endif %}>D</option>
+      <option value="f" {% if status_filter == 'f' %}selected{% endif %}>F</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/grades/create/" class="btn btn-primary">+ New Grade</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Student Name</th><th>Subject</th><th>Marks</th><th>Max Marks</th><th>Grade Letter</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/grades/{{ r.pk }}/edit/"><strong>{{ r.student_name }}</strong></a></td>
+        <td>{{ r.subject|default:"-" }}</td>
+        <td>{{ r.marks|floatformat:2 }}</td>
+        <td>{{ r.max_marks|floatformat:2 }}</td>
+        <td><span class="badge badge-blue">{{ r.get_grade_letter_display }}</span></td>
+        <td class="actions">
+          <a href="/grades/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/grades/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No grades found.</p>
+    <a href="/grades/create/" class="btn btn-primary" style="margin-top:1rem">Create Grade</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
