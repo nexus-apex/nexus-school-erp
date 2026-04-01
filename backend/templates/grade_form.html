@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Grade | NexusSchoolERP{% endblock %}
+{% block page_title %}{% if editing %}Edit Grade{% else %}New Grade{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Student Name</label>
+        <input type="text" name="student_name" value="{{ record.student_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" name="subject" value="{{ record.subject|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Marks</label>
+        <input type="number" step="0.01" name="marks" value="{{ record.marks|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Max Marks</label>
+        <input type="number" step="0.01" name="max_marks" value="{{ record.max_marks|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Grade Letter</label>
+        <select name="grade_letter">
+          <option value="a+" {% if record.grade_letter == 'a+' %}selected{% endif %}>A+</option>
+          <option value="a" {% if record.grade_letter == 'a' %}selected{% endif %}>A</option>
+          <option value="b+" {% if record.grade_letter == 'b+' %}selected{% endif %}>B+</option>
+          <option value="b" {% if record.grade_letter == 'b' %}selected{% endif %}>B</option>
+          <option value="c+" {% if record.grade_letter == 'c+' %}selected{% endif %}>C+</option>
+          <option value="c" {% if record.grade_letter == 'c' %}selected{% endif %}>C</option>
+          <option value="d" {% if record.grade_letter == 'd' %}selected{% endif %}>D</option>
+          <option value="f" {% if record.grade_letter == 'f' %}selected{% endif %}>F</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Exam Type</label>
+        <select name="exam_type">
+          <option value="unit_test" {% if record.exam_type == 'unit_test' %}selected{% endif %}>Unit Test</option>
+          <option value="mid_term" {% if record.exam_type == 'mid_term' %}selected{% endif %}>Mid Term</option>
+          <option value="final" {% if record.exam_type == 'final' %}selected{% endif %}>Final</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Term</label>
+        <input type="text" name="term" value="{{ record.term|default:'' }}">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Grade</button>
+      <a href="/grades/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
